@@ -1,6 +1,7 @@
 {
   "name": "addtodate",
   "type": "flogo:activity",
+  "ref": "github.com/s0rbus/flogo-components/activity/addtodate",
   "version": "0.0.1",
   "title": "Add to date",
   "description": "Add a specified number of units to a date",

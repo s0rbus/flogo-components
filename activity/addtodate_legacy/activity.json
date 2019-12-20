@@ -1,12 +1,12 @@
 {
-    "name": "addtodate",
+    "name": "addtodate_legacy",
     "type": "flogo:activity",
-    "ref": "github.com/s0rbus/flogo-components/activity/addtodate",
+    "ref": "github.com/s0rbus/flogo-components/activity/addtodate_legacy",
     "version": "0.1.0",
     "title": "Add to Date",
     "description": "Add a specified number of units to a date",
     "author": "s0rbus",
-    "homepage": "https://github.com/s0rbus/flogo-components/tree/master/activity/addtodate",
+    "homepage": "https://github.com/s0rbus/flogo-components/tree/master/activity/addtodate_legacy",
     "inputs":[
       {
         "name": "number",
