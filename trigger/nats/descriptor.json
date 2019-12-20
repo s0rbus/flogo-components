@@ -1,0 +1,38 @@
+{
+  "name": "flogo-nats",
+  "type": "flogo:trigger",
+  "ref": "github.com/s0rbus/flogo-components/trigger/nats",
+  "version": "0.0.1",
+  "title": "Receive NATS messages",
+  "description": "Trigger responds to messages from NATS (nats.io)",
+  "homepage": "https://github.com/s0rbus/flogo-components/tree/master/trigger/nats",
+  "settings": [
+    {
+      "name": "host",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "port",
+      "type": "int",
+      "required": true
+    }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "topic",
+        "type": "string",
+        "required": true,
+        "description": "The nats topic on which to listen for messages"
+      }
+    ]
+  },
+  "output": [
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The message that was consumed"
+    }
+  ]
+}
