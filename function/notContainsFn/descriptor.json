@@ -1,0 +1,27 @@
+{
+  "name": "notContainsFn",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "string does not contain substr",
+  "description": "returns bool",
+  "homepage": "https://github.com/s0rbus/flogo-components/function/notContainsFn",
+  "functions": [
+    {
+      "name": "notcontains",
+      "description": "check if str2 is NOT in str1",
+      "args": [
+			{
+			  "name": "str1",
+			  "type": "string"
+			},
+			{
+			  "name": "str2",
+			  "type": "string"
+			}
+	   ],
+		"return" : {
+			"type": "bool"
+		}
+    }
+  ]
+}
