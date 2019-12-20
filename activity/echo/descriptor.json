@@ -1,0 +1,29 @@
+{
+  "name": "echo-activity",
+  "type": "flogo:activity",
+  "ref": "github.com/s0rbus/flogo-components/activity/echo",
+  "version": "0.0.1",
+  "title": "Echo Activity",
+  "description": "Simple echo, based on flogo's Sample Activity",
+  "homepage": "https://github.com/s0rbus/flogo-components/tree/master/activity/echo",
+  "settings": [
+    {
+      "name": "aSetting",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "input": [
+    {
+      "name": "anInput",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "output": [
+    {
+      "name": "anOutput",
+      "type": "string"
+    }
+  ]
+}
