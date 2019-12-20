@@ -1,0 +1,38 @@
+{
+  "name": "addtodate",
+  "type": "flogo:activity",
+  "version": "0.0.1",
+  "title": "Add to date",
+  "description": "Add a specified number of units to a date",
+  "homepage": "https://github.com/s0rbus/flogo-components/tree/master/examples/activity/addtodate",
+  "settings": [
+    {
+      "name": "aSetting",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "input": [
+    {
+      "name": "number",
+      "type": "integer",
+      "required": true
+    },
+    {
+      "name": "units",
+      "type": "string",
+      "allowed" : ["years", "months", "days"],
+      "required": true
+    },
+    {
+      "name": "date",
+      "type": "string"
+    }
+  ],
+  "output": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}

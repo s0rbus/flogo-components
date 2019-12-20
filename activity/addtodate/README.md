@@ -1,7 +1,11 @@
 # Add to Date
 This activity provides your Flogo app the ability to add a specified number of units to a date
 
-Based on: https://github.com/retgits/flogo-components/activity/addtodate
+Based on original code from 'retgits':
+https://github.com/retgits/flogo-components/blob/master/activity/addtodate
+
+This version has been updated for flogo 0.9.2
+
 
 ## Installation
 
@@ -18,10 +22,11 @@ Inputs and Outputs:
 
 ```json
 {
-"inputs":[
+"input":[
       {
         "name": "number",
-        "type": "integer"
+        "type": "integer",
+        "reuired": true
       },
       {
         "name": "units",
@@ -33,7 +38,7 @@ Inputs and Outputs:
         "type": "string"
       }
     ],
-    "outputs": [
+    "output": [
       {
         "name": "result",
         "type": "string"

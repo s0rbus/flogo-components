@@ -1,64 +1,72 @@
-// Package addtodate adds a specified number of units to a date.
 package addtodate
 
 import (
 	"time"
 
 	"github.com/project-flogo/core/activity"
-	//"github.com/TIBCOSoftware/flogo-lib/logger"
+	"github.com/project-flogo/core/data/metadata"
 )
 
-// Constants used by the code to represent the input and outputs of the JSON structure
-const (
-	number = "number"
-	units  = "units"
-	date   = "date"
-	result = "result"
-)
-
-// log is the default package logger
-//var log = logger.GetLogger("activity-addtodate")
-
-// MyActivity is a stub for your Activity implementation
-type MyActivity struct {
-	metadata *activity.Metadata
+func init() {
+	_ = activity.Register(&Activity{}) //activity.Register(&Activity{}, New) to create instances using factory method 'New'
 }
 
-// NewActivity creates a new activity
-func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &MyActivity{metadata: metadata}
+var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
+
+//New optional factory method, should be used if one activity instance per configuration is desired
+func New(ctx activity.InitContext) (activity.Activity, error) {
+
+	s := &Settings{}
+	err := metadata.MapToStruct(ctx.Settings(), s, true)
+	if err != nil {
+		return nil, err
+	}
+
+	//ctx.Logger().Debugf("Setting: %s", s.ASetting)
+
+	act := &Activity{} //add aSetting to instance
+
+	return act, nil
 }
 
-// Metadata implements activity.Activity.Metadata
-func (a *MyActivity) Metadata() *activity.Metadata {
-	return a.metadata
+// Activity is an sample Activity that can be used as a base to create a custom activity
+type Activity struct {
 }
 
-// Eval implements activity.Activity.Eval
-func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
+// Metadata returns the activity's metadata
+func (a *Activity) Metadata() *activity.Metadata {
+	return activityMd
+}
 
-	// Get the inputs
-	ivNumber := context.GetInput(number).(int)
-	ivUnits := context.GetInput(units).(string)
-	ivDate := context.GetInput(date).(string)
+// Eval implements api.Activity.Eval - Logs the Message
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	date := time.Now()
 
-	if ivDate != "" {
-		date, _ = time.Parse("2006-01-02", ivDate)
+	input := &Input{}
+	err = ctx.GetInputObject(input)
+	if err != nil {
+		return false, err
 	}
 
-	switch ivUnits {
-	case "days":
-		date = date.AddDate(0, 0, 1*ivNumber)
-	case "months":
-		date = date.AddDate(0, 1*ivNumber, 0)
-	case "years":
-		date = date.AddDate(1*ivNumber, 0, 0)
+	if input.Date != "" {
+		date, _ = time.Parse("2006-01-02", input.Date)
 	}
 
-	// Set the output value in the context
-	context.SetOutput(result, date.Format("2006-01-02"))
+	switch input.Units {
+   case "days":
+      date = date.AddDate(0, 0, 1*input.Number)
+   case "months":
+      date = date.AddDate(0, 1*input.Number, 0)
+   case "years":
+      date = date.AddDate(1*input.Number, 0, 0)
+   }
+
+	output := &Output{Result: date.Format("2006-01-02")}
+	err = ctx.SetOutputObject(output)
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }
