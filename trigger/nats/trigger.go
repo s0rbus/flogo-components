@@ -2,14 +2,16 @@ package nats
 
 import (
 	"context"
+	"fmt"
 
    "github.com/nats-io/nats.go"
-	"github.com/project-flogo/core/data/coerce"
+	//"github.com/project-flogo/core/data/coerce"
 	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
 )
 
-var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{}, &Reply{})
+var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
 
 func init() {
 	_ = trigger.Register(&Trigger{}, &Factory{})
@@ -90,11 +92,11 @@ func (t *Trigger) Stop() error {
 }
 
 //NewNatsHandler creates a new nats handler to handle a topic
-func NewNatsHandler(logger log.Logger, handler trigger.Handler,  nc *nats.Connection) (*Handler, error) {
+func NewNatsHandler(logger log.Logger, handler trigger.Handler,  nc *nats.Conn) (*Handler, error) {
 	natsHandler := &Handler{logger: logger, shutdown: make(chan struct{}), handler: handler}
 
-	handlerSetting := &HandlerSetting{}
-	err := metadata.MapToStruct(handler,Settings(), handlerSetting, true)
+	handlerSetting := &HandlerSettings{}
+	err := metadata.MapToStruct(handler.Settings(), handlerSetting, true)
 	if err != nil {
 		return nil, err
 	}
@@ -108,23 +110,56 @@ func NewNatsHandler(logger log.Logger, handler trigger.Handler,  nc *nats.Connec
 	//TODO - need to think how to create/contain nats subscribers..
 	//and return inside handler
 
+	//6/1/2020 - let's have a go with a chan subscriber
+	//returns *Subscription
+	subchan := make(chan *nats.Msg, 64)
+	sub, err := nc.ChanSubscribe(handlerSetting.Topic, subchan)
+
+	if err != nil {
+		return nil, err
+	}
+
+	natsHandler.subscribers = append(natsHandler.subscribers, Subscriber{subscriber: sub, ch: subchan})
+
 	return natsHandler, nil
+}
+
+type Subscriber struct {
+	subscriber *nats.Subscription
+	ch chan *nats.Msg
 }
 
 type Handler struct {
 	shutdown chan struct{}
 	logger log.Logger
 	handler trigger.Handler
-	//TBD nats subscriber....
+	subscribers []Subscriber
 }
 
 //TBD.....
-func (h *Handler) consumeTopic() {
+func (h *Handler) consumeTopic(s Subscriber) {
+	for {
+		select {
+		case <-h.shutdown:
+			return
+		case msg := <-s.ch:
+			out := &Output{}
+			out.Message = string(msg.Data)
+
+			_, err := h.handler.Handle(context.Background(), out)
+			if err != nil {
+				h.logger.Errorf("Run action for handler [%s] failed for reason [%s] message lost", h.handler.Name(), err)
+			}
+		}
+	}
 }
 
 //Start starts the handler
 func (h *Handler) Start() error {
 	//TBD iterate over subscribers....?
+	for _, s := range h.subscribers {
+		go h.consumeTopic(s)
+	}
 
 	return nil
 }
@@ -132,6 +167,13 @@ func (h *Handler) Start() error {
 //Stop stops the handler
 func (h *Handler) Stop() error {
 	//TBD iterate over subscribers....?
+
+	close(h.shutdown)
+
+	for _, s := range h.subscribers {
+		//catch err and return???
+		s.subscriber.Unsubscribe()
+	}
 
 	return nil
 }
