@@ -145,6 +145,7 @@ func (h *Handler) consumeTopic(s Subscriber) {
 		case msg := <-s.ch:
 			out := &Output{}
 			out.Message = string(msg.Data)
+			h.logger.Errorf("Received message data: [%v]", out.Message)
 
 			_, err := h.handler.Handle(context.Background(), out)
 			if err != nil {
