@@ -11,7 +11,7 @@ My collection of custom built flogo components
 * [nats](trigger/nats): NATS subscriber
 
 ## Functions
-* [NotContains](trigger/notContainsFn): string does not contain substring
+* [NotContains](function/notContainsFn): string does not contain substring
 
 ## Installation
 
@@ -34,6 +34,6 @@ flogo install github.com/s0rbus/flogo-components/function/notContainsFn
 ```
 
 ## License
-Licensed under MIT license. See [LICENSE](License) for license text.
+Licensed under MIT license. See [LICENSE](LICENSE) for license text.
 
 

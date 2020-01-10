@@ -1,4 +1,5 @@
 # NATS
+
 This activity provides your Flogo app the ability to send a message to a NATS server
 
 ## Installation
@@ -13,11 +14,11 @@ https://github.com/s0rbus/flogo-components/activity/nats
 
 ## Configuration
 
-###Settings:
+### Settings:
 | Name        | Type   | Description
 |:---         | :---   | :---
-| server      | string | NATS server (format is servername:port) - ***REQUIRED***
-| topic       | string | topic on which to publish message - ***REQUIRED***
+| server      | string | NATS server (format is servername:port) - ***REQUIRED*** 
+| topic       | string | topic on which to publish message - ***REQUIRED*** 
 
 ### Input
 | Name        | Type   | Description

@@ -6,8 +6,6 @@ weight: 4701
 
 This trigger subscribes to a topic on Nats (nats.io) server and listens for the messages.
 
-***NOTE: THIS IS WIP, NOT COMPLETE, WILL NOT WORK***
-
 ### Flogo CLI
 ```bash
 flogo install github.com/s0rbus/flogo-components/trigger/nats
