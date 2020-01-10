@@ -1,0 +1,31 @@
+{
+  "name": "flogo-nats",
+  "type": "flogo:activity",
+  "ref": "github.com/s0rbus/flogo-components/activity/nats",
+  "version": "0.0.1",
+  "title": "Publish NATS message",
+  "description": "Publish a message to a NATS topic",
+  "homepage": "https://github.com/s0rbus/flogo-components/tree/master/examples/activity/nats",
+  "settings": [
+    {
+      "name": "server",
+      "type": "string",
+      "required": true,
+      "description": "The NATS server:port to connect to. Defaults to port 4222"
+    },
+    {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "description": "The NATS topic to send message to"
+    }
+  ],
+  "input": [
+    {
+      "name": "message",
+      "type": "string",
+      "required": true,
+      "description": "The message to send"
+    }
+  ]
+}
